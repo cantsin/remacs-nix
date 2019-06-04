@@ -1,4 +1,10 @@
-.PHONY: debug
+.PHONY: debug remacs
+
+all:
+	nix-build --show-trace build.nix
+
+remacs:
+        git clone https://github.com/remacs/remacs
 
 vendor:
 	cd remacs/rust_src && cargo vendor -x && cp -r vendor/ ../../vendor;

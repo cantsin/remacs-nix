@@ -21,15 +21,21 @@ let cargoPackages = (import ./Cargo.nix).__all;
 in
 
 let remacs = stdenv.mkDerivation rec {
-  name = "remacs-dev";
+  name = "remacs";
+  version = "dev";
 
-  src = fetchFromGitHub {
+  # prefer our local copy for ease of debugging
+  src = if lib.pathExists ./remacs then
+    ./remacs
+  else fetchFromGitHub {
     owner = "remacs";
     repo = "remacs";
-    rev = "585040adf0bb14eb80aec218217e0c5bf47780dd";
-    sha256 = "0aplqz5xl7y7jdps37yh291qvvlrc4gm0livbcdcckqwjkkbkb17";
-    # date = 2019-05-21T17:15:34-07:00;
+    rev = "8d939e72e48ba54f48994a5a47fbe7d12c71ef97";
+    sha256 = "0gcbxnhjbxd5jv8ghmwlacnhp7qrgmnakljqgb6mf3911jziq0cb";
+    # date = 2019-05-29T14:52:19+02:00;
   };
+
+  enableParallelBuilding = true;
 
   buildInputs = [
     rust systemd texinfo libjpeg libtiff giflib xorg.libXpm gtk3
@@ -51,7 +57,7 @@ let remacs = stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  # TODO: do this properly
+  # TODO: handle cargo dependencies properly
   postConfigure = ''
     export HOME=$TMP;
     mkdir $TMP/.cargo;
