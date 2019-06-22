@@ -5,13 +5,12 @@
   all-the-icons-dired
   all-the-icons-ivy
   autodisass-llvm-bitcode
-  auto-yasnippet
   avy
   cargo
   cider
   company
   company-emacs-eclim
-  company-irony
+  # company-irony
   company-ghc
   company-lsp
   counsel
@@ -25,15 +24,13 @@
   eclim
   elm-mode
   ember-mode
-  ember-yasnippets
   epl
   erc-image
-  eshell-prompt-extras
   esxml
   expand-region
   f
   flycheck
-  flycheck-irony
+  # flycheck-irony
   flycheck-haskell
   flycheck-rust
   flymake-lua
@@ -50,7 +47,7 @@
   hydra
   idris-mode
   interleave
-  irony
+  # irony
   ivy
   ivy-hydra
   ivy-rich
@@ -80,7 +77,6 @@
   pallet
   pandoc-mode
   paradox
-  paredit
   pkg-info
   popup
   powerline
@@ -88,11 +84,13 @@
   prodigy
   projectile
   puppet-mode
+  racer
   reason-mode
   restclient
   ripgrep
   rjsx-mode
   rust-mode
+  rustic
   s
   scala-mode
   scss-mode
@@ -119,7 +117,6 @@
   writegood-mode
   ws-butler
   yaml-mode
-  yasnippet
 ] ++ [
   /* overrides */
   (epkgs.lua-mode.override (args: {

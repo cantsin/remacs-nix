@@ -1,8 +1,5 @@
 with import <nixpkgs> {};
 
-let lib = import <nixpkgs/lib>;
-in
-
 let src = fetchFromGitHub {
       owner = "mozilla";
       repo = "nixpkgs-mozilla";
@@ -14,26 +11,19 @@ in
 
 with import "${src.out}/rust-overlay.nix" pkgs pkgs;
 
-let rust = (rustChannelOf { date = "2019-05-01"; channel = "nightly"; }).rust;
+let
+  rust = (rustChannelOf { date = "2019-05-01"; channel = "nightly"; }).rust;
 in
 
-let cargoPackages = (import ./Cargo.nix).__all;
+let
+  remacsRust = import ./remacs.nix;
 in
 
 let remacs = stdenv.mkDerivation rec {
   name = "remacs";
   version = "dev";
 
-  # prefer our local copy for ease of debugging
-  src = if lib.pathExists ./remacs then
-    ./remacs
-  else fetchFromGitHub {
-    owner = "remacs";
-    repo = "remacs";
-    rev = "8d939e72e48ba54f48994a5a47fbe7d12c71ef97";
-    sha256 = "0gcbxnhjbxd5jv8ghmwlacnhp7qrgmnakljqgb6mf3911jziq0cb";
-    # date = 2019-05-29T14:52:19+02:00;
-  };
+  src = ./remacs;
 
   enableParallelBuilding = true;
 
@@ -41,9 +31,7 @@ let remacs = stdenv.mkDerivation rec {
     rust systemd texinfo libjpeg libtiff giflib xorg.libXpm gtk3
     gnutls ncurses libxml2 xorg.libXt imagemagick librsvg gpm dbus
     libotf pkgconfig autoconf clang llvmPackages.libclang git
-  ]
-  # ++ cargoPackages
-  ;
+  ];
 
   patches = [./autogen-sh-0001.patch];
 
@@ -57,19 +45,11 @@ let remacs = stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  # TODO: handle cargo dependencies properly
-  postConfigure = ''
-    export HOME=$TMP;
-    mkdir $TMP/.cargo;
-    cat ${./config} | sed "s|TMP|$TMP|" > $TMP/.cargo/config;
-    cp -r ${./vendor} $TMP/vendor;
-  '';
-
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
-  # point Cargo to /tmp instead
+  # redirect Cargo to use pre-built remacs rust sources instead
   preBuild = ''
-    export HOME=$TMP;
+    export HOME=${remacsRust};
   '';
 
   makeFlags = [

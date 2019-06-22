@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
     systemd texinfo libjpeg libtiff giflib xorg.libXpm gtk3 gnutls
     ncurses libxml2 xorg.libXt imagemagick librsvg gpm dbus libotf
-    clang_6 pkgconfig autoconf rustup openssl
+    clang_6 pkgconfig autoconf rustup openssl gdb rr
   ];
 
   shellHook = ''
