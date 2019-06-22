@@ -16,7 +16,7 @@ let
 in
 
 let
-  remacsRust = import ./remacs.nix;
+  remacsRust = import ./remacs-rust.nix;
 in
 
 let remacs = stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ let remacs = stdenv.mkDerivation rec {
     libotf pkgconfig autoconf clang llvmPackages.libclang git
   ];
 
-  patches = [./autogen-sh-0001.patch];
+  patches = [./files/autogen-sh-0001.patch];
 
   postPatch = ''
     pwd="$(type -P pwd)"
@@ -67,7 +67,7 @@ let remacs = stdenv.mkDerivation rec {
     ln -s $out/share/remacs $out/share/emacs
 
     mkdir -p $out/share/emacs/site-lisp
-    cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
+    cp ${./files/site-start.el} $out/share/emacs/site-lisp/site-start.el
     $out/bin/emacs --batch -f batch-byte-compile $out/share/emacs/site-lisp/site-start.el
   '';
 
