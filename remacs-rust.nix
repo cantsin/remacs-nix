@@ -1,3 +1,5 @@
+{ remacsSource ? ./remacs }:
+
 with import <nixpkgs> {};
 
 let
@@ -19,7 +21,7 @@ let remacsRustBindings = fetchcargo rec {
   name = "remacsRustBindings";
   sourceRoot = null;
   srcs = null;
-  src = ./remacs/rust_src/remacs-bindings;
+  src = "${remacsSource}/rust_src/remacs-bindings";
   cargoUpdateHook = doVersionedUpdate;
   patches = [];
   sha256 = "0wgyzy73hlxzb375nmi1vpwinx9hwrgczl6jl45wlp9653920845";
@@ -30,7 +32,7 @@ let remacsRustSrc = fetchcargo rec {
   name = "remacsRustSrc";
   sourceRoot = null;
   srcs = null;
-  src = ./remacs/rust_src;
+  src = "${remacsSource}/rust_src";
   cargoUpdateHook = ''
     sed -e 's/@CARGO_.*@//' Cargo.toml.in > Cargo.toml
   '' + doVersionedUpdate;
@@ -43,7 +45,7 @@ let remacsHashdir = fetchcargo rec {
   name = "remacsHashdir";
   sourceRoot = null;
   srcs = null;
-  src = ./remacs/lib-src/hashdir;
+  src = "${remacsSource}/lib-src/hashdir";
   cargoUpdateHook = doVersionedUpdate;
   patches = [];
   sha256 = "0054hrqc3yab0y11mmv1r97fngcpp9w191049ivawwmmg9yp8xri";
