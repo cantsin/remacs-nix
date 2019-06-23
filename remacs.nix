@@ -1,4 +1,4 @@
-{ remacsSource ? ./remacs }:
+{ remacsSource ? ./remacs, local ? true }:
 
 with import <nixpkgs> {};
 
@@ -14,6 +14,7 @@ in
 with import "${src.out}/rust-overlay.nix" pkgs pkgs;
 
 let
+  # as per remacs/rust-toolchain
   rust = (rustChannelOf { date = "2019-05-01"; channel = "nightly"; }).rust;
 in
 
@@ -22,8 +23,10 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "remacs";
-  version = "dev";
+  name = "remacs-${version}${versionModifier}";
+  # as per remacs/configure.ac AC_INIT
+  version = "27.0.50";
+  versionModifier = if local then "-git" else "";
 
   src = remacsSource;
 

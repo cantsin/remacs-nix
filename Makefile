@@ -1,7 +1,7 @@
 .PHONY: debug remacs
 
 all:
-	nix-build --show-trace build.nix
+	nix-build --show-trace --arg local true build.nix
 
 remacs:
         git clone https://github.com/remacs/remacs
